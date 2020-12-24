@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
+  <!-- <link rel="icon" href="<%= BASE_URL %>favicon.ico" /> -->
+  <title></title>
+  <link rel="stylesheet" href="./index.css" />
+</head>
+
+<body>
+    <header class="header">
+      <div class="bar">
+        <h1 class="title h100c">Payment Detail</h1>
+        <span class="close"><svg width="22px"height="18px"viewBox="0 0 22 18"version="1.1"xmlns="http://www.w3.org/2000/svg"xmlns:xlink="http://www.w3.org/1999/xlink"><!--Generator:Sketch49.3(51167)-http://www.bohemiancoding.com/sketch--><title>Cancle</title><desc>CreatedwithSketch.</desc><defs></defs><g id="Page-1"stroke="none"stroke-width="1"fill="none"fill-rule="evenodd"stroke-linecap="round"stroke-linejoin="round"><g id="Connect"transform="translate(-339.000000, -235.000000)"stroke="#B3B3B3"stroke-width="1.006"><g id="Group-2"transform="translate(339.000000, 235.000000)"><g id="Cancle"><g id="Page-1"transform="translate(3.384615, 3.076923)"><path d="M14.9859279,12.2254672 L0.799401619,0.618309312"id="Stroke-3"></path><path d="M0.514212146,12.0867725 L14.8014753,0.562035628"id="Stroke-5"></path></g></g></g></g></g></svg></span>
+      </div>
+      <h1 class="title money h100c" id="money">$2000</h1>
+    </header>
+
+    <section class="payments">
+      <h2 class="title">Methods:</h2>
+      <div class="methods-wrap" id="methods_wrap">
+      </div>
+      <div class="stripe-pay" id="stripe_pay">
+        <form id="payment-form">
+          <div id="card-element"><!--Stripe.js injects the Card Element--></div>
+          <button id="submit" type="submit">
+            <div class="spinner hidden" id="spinner"></div>
+            <span id="submit-text">Pay</span>
+          </button>
+          <p id="card-error" role="alert"></p>
+        </form>
+        <p class="result-message hidden">
+          <span style="width: 100%;display: inline-block;">Payment succeeded, see the result in your <a href="" target="_blank">Stripe dashboard.</a></span>
+          <span style="width: 100%;display: inline-block;">Now you can close the page.</span>
+        </p>
+      </div>
+      <div id="pay_button" class="pay-button flexc">Pay</div>
+    </section>
+
+    <section class="policy-and-Terms">
+      <p class="text">
+        Payment will be charged to your Google play account at the confirmation of purchase. 
+        Subscription automatically renews unless it is canceled at least 24 hours before the end of the current period. 
+        Your account will be charged for renewal within 24 hours prior to the end of the current period. By tapping continue, 
+        you agree to our <a href="#policy">Privacy Policy</a> and <a href="#Terms">Terms.</a>
+      </p>
+    </section>
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="./index.js"></script>
+</body>
+</html>
