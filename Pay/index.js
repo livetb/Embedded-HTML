@@ -122,7 +122,7 @@ function renderMethods(arr) {
         if (i % 2 === 0) methodsHTML.push('<div class="line">');
         methodsHTML.push(`
             <label class="item">
-                <input ${i === 0 ? "checked" : ""} type="radio" name="method" value="${arr[i].payParams}"  />
+                <input type="radio" name="method" value="${arr[i].payParams}"  />
                 <div class="method">
                     <span class="icon flexc"><img src="${arr[i].icon}" /></span>
                     <p class="name flexc">
@@ -152,12 +152,12 @@ function renderMethods(arr) {
 }
 function hideStripe(){
     config.showStripe = false;
-    document.getElementById("pay_button").style.display = "flex";
+    // document.getElementById("pay_button").style.display = "flex";
     document.getElementById("stripe_pay").style.display = "none";
 }
 function showStripe(clientSecret) {
     config.showStripe = true;
-    document.getElementById("pay_button").style.display = "none";
+    // document.getElementById("pay_button").style.display = "none";
     document.getElementById("stripe_pay").style.display = "block";
     if(config.stripePaySuccess) return;
     var elements = stripe.elements();
@@ -254,36 +254,59 @@ window.addEventListener("load", function () {
     document.getElementById("money").innerText = config.params[1];
     renderMethods(config.payments);
     document.querySelectorAll("input[name=method]").forEach(ele => {
-        ele.addEventListener("change", function(){
+        ele.addEventListener("change", async function(){
             console.log(this.value, this.checked);
             if(!this.checked) return;
-            if(this.value !== "stripe") hideStripe(); 
-            else if(config.stripePaySuccess || config.stripeMounted) showStripe();
+            // if(this.value !== "stripe") hideStripe(); 
+            // else if(config.stripePaySuccess || config.stripeMounted) showStripe();
+            let res = null;
+            document.getElementById("load-pay").style.display ="flex";
+            if(this.value === "stripe"){
+                if(config.stripePaySuccess){
+                    showStripe();
+                }
+                else {
+                    res = await PayByStripe(config.params[0]);
+                    if (res.status !== 0) {
+                        alert("Recharge Failed.");
+                    }
+                }
+                showStripe(res.data);
+            }
+            else {
+                res = await PayByUrl(config.params[0], this.value);
+                console.log("PayByUrl: ", res);
+                if (res.status !== 0) {
+                    alert("Recharge Failed.");
+                }else location.href = res.data.payUrl;
+            }
+            document.getElementById("load-pay").style.display = "none";
+            
         });
     })
-    document.getElementById("pay_button").addEventListener("click", async function () {
-        let method = document.querySelector("input[name=method]:checked").value;
-        console.log(method, config.params);
-        let res = null;
-        if (method === "stripe") {
-            if(config.showStripe) return;
-            if(config.stripePaySuccess){
-                showStripe();
-                return;
-            }
-            res = await PayByStripe(config.params[0]);
-            if (res.status !== 0) {
-                alert("Recharge Failed.");
-            }
-            showStripe(res.data);
-            return;
-        }
-        res = await PayByUrl(config.params[0], method);
-        console.log("PayByUrl: ", res);
-        if (res.status !== 0) {
-            alert("Recharge Failed.");
-            return;
-        }
-        location.href = res.data.payUrl;
-    });
+    // document.getElementById("pay_button").addEventListener("click", async function () {
+    //     let method = document.querySelector("input[name=method]:checked").value;
+    //     console.log(method, config.params);
+    //     let res = null;
+    //     if (method === "stripe") {
+    //         if(config.showStripe) return;
+    //         if(config.stripePaySuccess){
+    //             showStripe();
+    //             return;
+    //         }
+    //         res = await PayByStripe(config.params[0]);
+    //         if (res.status !== 0) {
+    //             alert("Recharge Failed.");
+    //         }
+    //         showStripe(res.data);
+    //         return;
+    //     }
+    //     res = await PayByUrl(config.params[0], method);
+    //     console.log("PayByUrl: ", res);
+    //     if (res.status !== 0) {
+    //         alert("Recharge Failed.");
+    //         return;
+    //     }
+    //     location.href = res.data.payUrl;
+    // });
 });
